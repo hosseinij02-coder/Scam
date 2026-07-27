@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ریسک‌سنج رویافروشی خط تولید</title>
+<meta name="description" content="ابزار ارزیابی احتمال کلاهبرداری یا وعده‌های غیرواقعی در پیشنهادهای فروش خط تولید در ایران">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14231F;
+    --ink-soft:#3E4C46;
+    --paper:#F3F6F3;
+    --panel:#FFFFFF;
+    --line:#D9E1DC;
+    --brand:#0F6B5C;
+    --brand-dark:#0A4A40;
+    --brand-tint:#E4F0EC;
+    --amber:#B4650A;
+    --amber-tint:#FBEEE0;
+    --red:#A32020;
+    --red-tint:#F8E7E5;
+    --green:#1E7A46;
+    --green-tint:#E6F2EA;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Vazirmatn', Tahoma, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, var(--brand-tint), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, #EDE7D8 0%, transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    min-height:100vh;
+    line-height:1.75;
+  }
+  .wrap{
+    max-width:680px;
+    margin:0 auto;
+    padding:32px 20px 64px;
+  }
+  header.site{
+    text-align:center;
+    margin-bottom:28px;
+  }
+  .kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--brand-dark);
+    background:var(--brand-tint);
+    border:1px solid #cfe4dd;
+    padding:6px 14px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--brand);}
+  h1{
+    font-size:clamp(24px,5vw,32px);
+    font-weight:800;
+    margin:0 0 8px;
+    letter-spacing:-0.01em;
+  }
+  .sub{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:520px;
+    margin:0 auto;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px 24px;
+    box-shadow:0 1px 2px rgba(20,35,31,0.04), 0 12px 30px -18px rgba(20,35,31,0.25);
+  }
+  /* progress */
+  .progress-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .progress-label{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .segments{
+    display:flex;
+    gap:5px;
+    margin-bottom:22px;
+  }
+  .segments span{
+    flex:1;
+    height:5px;
+    border-radius:99px;
+    background:var(--line);
+    transition:background .25s ease;
+  }
+  .segments span.done{background:var(--brand);}
+  .segments span.current{background:var(--brand); opacity:.5;}
+
+  .q-title{
+    font-size:18px;
+    font-weight:700;
+    margin:0 0 6px;
+  }
+  .q-hint{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .opt{
+    text-align:right;
+    border:1.5px solid var(--line);
+    background:#fff;
+    border-radius:12px;
+    padding:14px 16px;
+    font-family:inherit;
+    font-size:15px;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease, transform .05s ease;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .opt .radio{
+    flex:0 0 auto;
+    width:18px;height:18px;border-radius:50%;
+    border:2px solid #B9C6C0;
+    position:relative;
+  }
+  .opt.selected{
+    border-color:var(--brand);
+    background:var(--brand-tint);
+  }
+  .opt.selected .radio{border-color:var(--brand);}
+  .opt.selected .radio::after{
+    content:'';
+    position:absolute;inset:3px;
+    border-radius:50%;
+    background:var(--brand);
+  }
+  .opt:hover{border-color:var(--brand);}
+  .opt:active{transform:scale(0.995);}
+
+  textarea.freetext{
+    width:100%;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:12px 14px;
+    font-family:inherit;
+    font-size:14.5px;
+    resize:vertical;
+    min-height:64px;
+    margin-bottom:22px;
+    color:var(--ink);
+  }
+  textarea.freetext:focus, .opt:focus-visible, button:focus-visible{
+    outline:2px solid var(--brand);
+    outline-offset:2px;
+  }
+
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+  }
+  button.btn{
+    font-family:inherit;
+    font-size:14.5px;
+    font-weight:700;
+    border-radius:10px;
+    padding:11px 20px;
+    cursor:pointer;
+    border:1.5px solid transparent;
+  }
+  .btn.primary{
+    background:var(--brand);
+    color:#fff;
+    border-color:var(--brand);
+  }
+  .btn.primary:disabled{
+    background:#B9C6C0;
+    border-color:#B9C6C0;
+    cursor:not-allowed;
+  }
+  .btn.ghost{
+    background:transparent;
+    color:var(--ink-soft);
+    border-color:var(--line);
+  }
+  .btn.ghost:hover{border-color:var(--ink-soft);}
+
+  /* results */
+  .gauge-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-bottom:8px;
+  }
+  .gauge-num{
+    font-size:42px;
+    font-weight:800;
+    margin-top:-58px;
+  }
+  .gauge-label{
+    font-size:14px;
+    font-weight:700;
+    padding:4px 14px;
+    border-radius:999px;
+    margin-top:4px;
+  }
+  .band-low .gauge-label{background:var(--green-tint); color:var(--green);}
+  .band-medium .gauge-label{background:var(--amber-tint); color:var(--amber);}
+  .band-high .gauge-label{background:var(--red-tint); color:var(--red);}
+
+  .section-title{
+    font-size:15px;
+    font-weight:700;
+    margin:26px 0 10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .flag-list{
+    list-style:none;
+    padding:0;margin:0;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .flag-list li{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    font-size:14px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    background:#fbfbf9;
+  }
+  .flag-list li.high{border-color:#e6bcb6; background:var(--red-tint);}
+  .flag-list li.mid{border-color:#eccfa0; background:var(--amber-tint);}
+  .flag-icon{flex:0 0 auto; font-size:16px; line-height:1.4;}
+
+  .notes-box{
+    background:var(--brand-tint);
+    border:1px solid #cfe4dd;
+    border-radius:12px;
+    padding:14px 16px;
+    font-size:13.8px;
+    color:var(--ink);
+    margin-bottom:6px;
+  }
+  .notes-box + .notes-box{margin-top:10px;}
+
+  .methodology{
+    margin-top:26px;
+    border-top:1px dashed var(--line);
+    padding-top:16px;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .methodology summary{
+    cursor:pointer;
+    font-weight:700;
+    color:var(--ink);
+    font-size:14px;
+    margin-bottom:8px;
+  }
+  .methodology ul{margin:8px 0 0; padding-inline-start:20px;}
+  .methodology li{margin-bottom:6px;}
+
+  .disclaimer{
+    margin-top:24px;
+    background:var(--amber-tint);
+    border:1px solid #eccfa0;
+    border-radius:12px;
+    padding:16px 16px;
+    font-size:13.5px;
+    color:#5c3c0c;
+  }
+  .disclaimer strong{color:#3d2900;}
+  .contact-line{
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:700;
+    font-size:14px;
+  }
+  .contact-line a{
+    color:var(--brand-dark);
+    text-decoration:none;
+    border-bottom:1.5px solid var(--brand-dark);
+  }
+
+  .restart-row{
+    display:flex;
+    justify-content:center;
+    margin-top:26px;
+  }
+
+  footer.site{
+    text-align:center;
+    margin-top:34px;
+    font-size:12px;
+    color:#7c8b84;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <span class="kicker"><span class="dot"></span> ابزار پیش‌غربالگری، نه نظر نهایی کارشناسی</span>
+    <h1>ریسک‌سنج رویافروشی خط تولید</h1>
+    <p class="sub">با پاسخ به چند سؤال، احتمال این‌که پیشنهاد فروش خط تولید یا سرمایه‌گذاری تولیدی که به شما شده واقعی باشد یا رویافروشی/کلاهبرداری، تخمین زده می‌شود؛ با در نظر گرفتن مقررات ایران.</p>
+  </header>
+
+  <div class="card">
+
+    <!-- QUIZ VIEW -->
+    <div id="quizView">
+      <div class="progress-row">
+        <span class="progress-label" id="progressLabel">سؤال ۱ از ۹</span>
+        <span class="progress-label" id="progressPercent">۱۱٪</span>
+      </div>
+      <div class="segments" id="segments"></div>
+
+      <h2 class="q-title" id="qTitle"></h2>
+      <p class="q-hint" id="qHint"></p>
+      <div class="options" id="optionsWrap"></div>
+      <textarea id="freeText" class="freetext" placeholder="مثال: نوار بهداشتی، بیودیزل از روغن پسماند، شمع‌سازی صنعتی و…" style="display:none;"></textarea>
+
+      <div class="nav-row">
+        <button class="btn ghost" id="prevBtn">قبلی</button>
+        <button class="btn primary" id="nextBtn" disabled>بعدی</button>
+      </div>
+    </div>
+
+    <!-- RESULT VIEW -->
+    <div id="resultView" style="display:none;">
+      <div class="gauge-wrap">
+        <svg id="gaugeSvg" width="260" height="150" viewBox="0 0 260 150"></svg>
+        <div class="gauge-num" id="gaugeNum">0٪</div>
+        <div class="gauge-label" id="gaugeLabel">در حال محاسبه…</div>
+      </div>
+
+      <p id="resultSummary" style="text-align:center; font-size:14.5px; color:var(--ink-soft); margin-top:14px;"></p>
+
+      <div id="flagsSection">
+        <h3 class="section-title">⚑ نشانه‌های استخراج‌شده از پاسخ‌های شما</h3>
+        <ul class="flag-list" id="flagList"></ul>
+      </div>
+
+      <div id="notesSection">
+        <h3 class="section-title">📋 نکات مربوط به مقررات ایران</h3>
+        <div id="notesWrap"></div>
+      </div>
+
+      <details class="methodology">
+        <summary>روش‌شناسی این ابزار چیست؟</summary>
+        <p>این ارزیابی بر پایه معیارهای رایج در بررسی فرصت‌های سرمایه‌گذاری (Due Diligence) توسط مشاوران کسب‌وکار طراحی شده و پنج محور را می‌سنجد:</p>
+        <ul>
+          <li><strong>شفافیت مجوز:</strong> وجود پروانه بهره‌برداری/ساخت رسمی از نهاد ذی‌ربط (صمت، غذا و دارو، استاندارد، محیط‌زیست).</li>
+          <li><strong>واقع‌گرایی بازده:</strong> مقایسه درصد سود اعلامی با میانگین بازده واقعی صنعت تولید در ایران.</li>
+          <li><strong>وضوح تعهدات قراردادی:</strong> بررسی وجود بندهای مبهم یا فرارِ از تعهدِ خرید تضمینی.</li>
+          <li><strong>اعتبارسنجی طرف قرارداد:</strong> سابقه ثبتی، آدرس فیزیکی و قابلیت استعلام شرکت.</li>
+          <li><strong>امکان‌سنجی بازار و تولید:</strong> هم‌خوانی ادعای محل/شیوهٔ تولید با الزامات قانونی همان صنعت.</li>
+        </ul>
+        <p>نتیجه یک درصد تخمینی است، نه یک حکم قطعی حقوقی یا فنی.</p>
+      </details>
+
+      <div class="disclaimer">
+        <strong>⚠️ یادآوری مهم:</strong> این عدد صرفاً یک برآورد اولیه بر اساس پاسخ‌های شماست و ممکن است خطا داشته باشد؛ جایگزین بررسی حقوقی، فنی یا استعلام رسمی از مراجع ذی‌صلاح (صمت، سازمان غذا و دارو، اتاق اصناف، سازمان استاندارد) نیست.
+        <div class="contact-line">
+          💬 برای مشاوره تخصصی‌تر می‌توانید در اینستاگرام پیام دهید:
+          <a href="https://instagram.com/dr.jhosseini" target="_blank" rel="noopener">dr.jhosseini@</a>
+        </div>
+      </div>
+
+      <div class="restart-row">
+        <button class="btn ghost" id="restartBtn">شروع دوباره</button>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="site">ابزار متن‌باز رایگان برای پیش‌غربالگری پیشنهادهای سرمایه‌گذاری تولیدی — نتایج جایگزین مشاوره حقوقی/فنی رسمی نیست.</footer>
+</div>
+
+<script>
+/* ---------------------------------------------------------------------
+   CONFIG — قابل ویرایش برای هر کسی که این ابزار را فورک/دیپلوی می‌کند
+--------------------------------------------------------------------- */
+const CONFIG = {
+  consultantLabel: "dr.jhosseini@",
+  consultantUrl: "https://instagram.com/dr.jhosseini"
+};
+
+/* ---------------------------------------------------------------------
+   QUESTION BANK
+   هر گزینه weight دارد (سهم در نمرهٔ ریسک) و در صورت وجود flag،
+   به‌عنوان «نشانهٔ هشدار» در نتیجه نمایش داده می‌شود.
+--------------------------------------------------------------------- */
+const questions = [
+  {
+    id: "category",
+    title: "این پیشنهاد دربارهٔ چه نوع فرآورده‌ای است؟",
+    hint: "این گزینه فقط برای متناسب‌سازی توضیحات قانونی استفاده می‌شود و در محاسبهٔ درصد ریسک اثر مستقیم ندارد.",
+    scored: false,
+    options: [
+      { label: "بهداشتی / آرایشی / خوراکی (مثل نوار بهداشتی، شوینده، مکمل، مواد غذایی)", value: "health" },
+      { label: "شیمیایی، سوخت جایگزین یا فرآورده از ضایعات (مثل بیودیزل، رزین، اسید)", value: "chem" },
+      { label: "فلزی، پلاستیکی یا صنعتی عمومی", value: "industrial" },
+      { label: "صنایع‌دستی، پوشاک یا سایر", value: "other" }
+    ]
+  },
+  {
+    id: "license",
+    title: "آیا فروشندهٔ خط تولید، مدرک مجوز رسمیِ قابل استعلام ارائه کرده؟",
+    hint: "مثل پروانهٔ بهره‌برداری از وزارت صمت، پروانهٔ ساخت از سازمان غذا و دارو، یا گواهی استاندارد ملی.",
+    scored: true,
+    options: [
+      { label: "بله، مدرک رسمی و قابل استعلام آنلاین دارد", weight: 0 },
+      { label: "نمی‌دانم / بررسی نکرده‌ام", weight: 10, flag: "استعلام مجوز رسمی انجام نشده است." },
+      { label: "می‌گوید نیازی به مجوز نیست یا «بعداً درست می‌شود»", weight: 25, flag: "فروشنده ادعا می‌کند نیازی به مجوز رسمی نیست — این خودش یک نشانهٔ جدی است." }
+    ]
+  },
+  {
+    id: "buyback",
+    title: "آیا خرید تضمینی محصول تولیدی شما ادعا شده؟",
+    hint: "به نحوهٔ نگارش تعهد در قرارداد دقت کنید، نه فقط وعدهٔ شفاهی.",
+    scored: true,
+    options: [
+      { label: "خیر، چنین ادعایی نشده", weight: 0 },
+      { label: "بله، با قرارداد شفاف و بدون بند فرار از تعهد", weight: 5 },
+      { label: "بله، اما قرارداد بندهای مبهم دارد (مثل «با تأیید کیفیت» یا «بسته به شرایط بازار»)", weight: 20, flag: "بند «خرید تضمینی» با عباراتی مبهم مشروط شده که در عمل می‌تواند بهانهٔ امتناع از خرید شود." },
+      { label: "بله، فقط وعدهٔ شفاهی بوده و در قرارداد چیزی نوشته نشده", weight: 30, flag: "خرید تضمینی فقط شفاهی مطرح شده و در قرارداد مکتوب نیست." }
+    ]
+  },
+  {
+    id: "profit",
+    title: "سود ماهانهٔ اعلامی برای سرمایه‌گذاری شما چقدر است؟",
+    hint: "میانگین بازده واقعی بیشتر واحدهای تولیدی کوچک در ایران معمولاً به‌صورت ماهانه تک‌رقمی است.",
+    scored: true,
+    options: [
+      { label: "کمتر از ۲٪ در ماه", weight: 0 },
+      { label: "بین ۲٪ تا ۵٪ در ماه", weight: 5 },
+      { label: "بین ۵٪ تا ۱۰٪ در ماه", weight: 15, flag: "سود ماهانهٔ ۵ تا ۱۰٪ برای صنایع تولیدی معمولی، بالاتر از میانگین واقعی بازار است." },
+      { label: "بالای ۱۰٪ در ماه یا وعدهٔ «بازگشت سرمایه در چند ماه»", weight: 25, flag: "سود بیش از ۱۰٪ ماهانه یا بازگشت سرمایهٔ فوق‌سریع، در صنایع تولیدی واقعی تقریباً بی‌سابقه است." }
+    ]
+  },
+  {
+    id: "sitegrade",
+    title: "آیا این فرآورده در دستهٔ موادی است که تولیدش نیازمند استقرار در شهرک صنعتی با مجوز/گرید خاص (زیست‌محیطی یا ایمنی) است؟",
+    hint: "مثل بسیاری از مواد شیمیایی، رنگ، سوخت جایگزین یا فرآورده‌های خطرناک.",
+    scored: true,
+    options: [
+      { label: "خیر، محدودیت خاصی برای محل تولید وجود ندارد", weight: 0 },
+      { label: "بله، و فروشنده الزامات شهرک صنعتی/محیط‌زیست را شفاف توضیح داده", weight: 5 },
+      { label: "بله، ولی فروشنده می‌گوید در منزل یا فضای غیرصنعتی هم قابل تولید است", weight: 35, flag: "این نوع فرآورده معمولاً فقط در شهرک‌های صنعتی و با مجوز محیط‌زیست قابل تولید قانونی است؛ ادعای تولید خانگی با این الزامات همخوانی ندارد." }
+    ]
+  },
+  {
+    id: "price",
+    title: "قیمت تجهیزات/خط تولید نسبت به نمونه‌های مشابه در بازار چطور است؟",
+    hint: "قیمت را با حداقل دو تأمین‌کنندهٔ دیگر مقایسه کنید.",
+    scored: true,
+    options: [
+      { label: "نزدیک به قیمت رایج بازار است", weight: 0 },
+      { label: "کمی بالاتر، ولی با خدمات/گارانتی اضافه توجیه‌پذیر است", weight: 5 },
+      { label: "مقایسه نکرده‌ام / نمی‌دانم", weight: 10, flag: "قیمت با نمونه‌های مشابه در بازار مقایسه نشده است." },
+      { label: "بسیار بالاتر از بازار، بدون توجیه روشن", weight: 25, flag: "قیمت اعلامی بدون توجیه فنی روشن، به‌طور محسوسی از بازار بالاتر است." }
+    ]
+  },
+  {
+    id: "verify",
+    title: "سابقهٔ فروشنده چقدر قابل استعلام است؟",
+    hint: "ثبت رسمی شرکت، آدرس فیزیکی واقعی، نمونه‌کار قابل بازدید، اینماد برای فروش آنلاین.",
+    scored: true,
+    options: [
+      { label: "کاملاً شفاف: ثبت شرکت، آدرس و نمونه‌کار واقعی قابل بازدید است", weight: 0 },
+      { label: "نسبتاً؛ فقط بخشی از این اطلاعات در دسترس است", weight: 10 },
+      { label: "خیر؛ فقط یک صفحهٔ اینستاگرام پرزرق‌وبرق با تبلیغ سنگین وجود دارد", weight: 25, flag: "هیچ سابقهٔ ثبتی یا آدرس فیزیکی قابل استعلامی ارائه نشده و تنها منبع، یک صفحهٔ شبکهٔ اجتماعی تبلیغاتی است." }
+    ]
+  },
+  {
+    id: "market",
+    title: "دربارهٔ بازار فروش محصول نهایی چه ادعایی شده؟",
+    hint: "به‌ویژه برای فرآورده‌های غیرمتعارف مثل سوخت تولیدی از ضایعات دقت کنید.",
+    scored: true,
+    options: [
+      { label: "بازار مصرف شناخته‌شده و رقابتی برای آن وجود دارد", weight: 0 },
+      { label: "بازار خاص/صادراتی ادعا شده، بدون مدرک مستقل", weight: 20, flag: "ادعای بازار صادراتی یا خاص، بدون قرارداد یا مدرک مستقل ارائه شده است." },
+      { label: "ادعا شده «بازار نامحدود» یا «هیچ رقیبی وجود ندارد»", weight: 25, flag: "ادعای «بازار نامحدود» یا «بدون رقیب» برای یک محصول تولیدی، معمولاً با واقعیت اقتصادی بازار همخوانی ندارد." }
+    ]
+  },
+  {
+    id: "language",
+    title: "در تبلیغات این پیشنهاد از عباراتی مثل «ثروتمند شدن تضمینی»، «بدون هیچ ریسکی»، «فرصت محدود، همین امروز ثبت‌نام کن» استفاده شده؟",
+    hint: "این عبارات، الگوی رایج تبلیغات وعده‌محور هستند.",
+    scored: true,
+    options: [
+      { label: "خیر، تبلیغات معتدل و مبتنی بر اطلاعات فنی بود", weight: 0 },
+      { label: "بله، چند مورد از این عبارات دیده شد", weight: 12 },
+      { label: "بله، اکثر تبلیغات با همین لحن است", weight: 30, flag: "زبان تبلیغاتی عمدتاً بر وعده‌های احساسی و فوریت مصنوعی متکی است، نه اطلاعات فنی/مالی قابل راستی‌آزمایی." }
+    ]
+  }
+];
+
+const MAX_WEIGHT = 25 + 30 + 25 + 35 + 25 + 25 + 25 + 30; // 220 - از سؤالات scored
+
+const regulatoryNotes = {
+  health: "بر اساس مقررات سازمان غذا و دارو (زیرمجموعهٔ وزارت بهداشت)، تولید و عرضهٔ فرآورده‌های خوراکی، آشامیدنی، آرایشی و بهداشتی — از جمله نوار بهداشتی — بدون «پروانهٔ بهداشتی تأسیس و بهره‌برداری» و مجوز فعالیت اقتصادی از مراجع ذی‌صلاح، غیرقانونی است و در فضای مسکونی معمولی قابل انجامِ قانونی نیست.",
+  chem: "تولید مواد شیمیایی یا فرآورده‌های مرتبط با سوخت جایگزین (مثل بیودیزل از روغن پسماند) معمولاً مستلزم استقرار در شهرک صنعتی مصوب و اخذ مجوز از سازمان محیط‌زیست است. همچنین ادعای «بازار تضمینی نامحدود» برای چنین محصولاتی، در شرایط فعلی بازار ایران معمولاً غیرواقعی است مگر با قرارداد خریدار واقعی اثبات شود.",
+  industrial: "بسیاری از کالاهای صنعتی عمومی مشمول «استاندارد ملی اجباری» (سازمان استاندارد ایران) هستند؛ نبود گواهی استاندارد به‌معنای غیرقانونی بودن عرضهٔ محصول است.",
+  other: "حتی برای صنایع‌دستی یا پوشاک، در صورت فروش با برند مشخص یا فروش آنلاین، ثبت برند و اخذ نماد اعتماد الکترونیکی (اینماد) توصیه می‌شود."
+};
+
+/* ---------------------------------------------------------------------
+   STATE
+--------------------------------------------------------------------- */
+let current = 0;
+const answers = {}; // id -> {weight, flag, value}
+let freeTextValue = "";
+
+const quizView = document.getElementById('quizView');
+const resultView = document.getElementById('resultView');
+const qTitle = document.getElementById('qTitle');
+const qHint = document.getElementById('qHint');
+const optionsWrap = document.getElementById('optionsWrap');
+const freeText = document.getElementById('freeText');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const segmentsEl = document.getElementById('segments');
+const progressLabel = document.getElementById('progressLabel');
+const progressPercent = document.getElementById('progressPercent');
+
+function buildSegments(){
+  segmentsEl.innerHTML = "";
+  questions.forEach((_, i) => {
+    const s = document.createElement('span');
+    if (i < current) s.classList.add('done');
+    if (i === current) s.classList.add('current');
+    segmentsEl.appendChild(s);
+  });
+}
+
+function renderQuestion(){
+  const q = questions[current];
+  buildSegments();
+  progressLabel.textContent = `سؤال ${toFa(current+1)} از ${toFa(questions.length)}`;
+  progressPercent.textContent = `${toFa(Math.round(((current+1)/questions.length)*100))}٪`;
+
+  qTitle.textContent = q.title;
+  qHint.textContent = q.hint || "";
+  optionsWrap.innerHTML = "";
+  freeText.style.display = "none";
+
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.type = 'button';
+    btn.innerHTML = `<span class="radio"></span><span>${opt.label}</span>`;
+    const saved = answers[q.id];
+    if (saved && saved.idx === idx) btn.classList.add('selected');
+    btn.addEventListener('click', () => {
+      answers[q.id] = {
+        idx,
+        weight: opt.weight || 0,
+        flag: opt.flag || null,
+        value: opt.value || null,
+        scored: q.scored
+      };
+      renderQuestion();
+      nextBtn.disabled = false;
+    });
+    optionsWrap.appendChild(btn);
+  });
+
+  // free text only on last question
+  if (current === questions.length - 1) {
+    freeText.style.display = "block";
+    freeText.value = freeTextValue;
+    freeText.oninput = (e) => { freeTextValue = e.target.value; };
+  }
+
+  prevBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+  nextBtn.textContent = current === questions.length - 1 ? "مشاهده نتیجه" : "بعدی";
+  nextBtn.disabled = !answers[q.id];
+}
+
+function toFa(n){
+  const map = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
+  return String(n).split('').map(c => map[c] !== undefined ? map[c] : c).join('');
+}
+
+prevBtn.addEventListener('click', () => {
+  if (current > 0){ current--; renderQuestion(); }
+});
+nextBtn.addEventListener('click', () => {
+  if (current < questions.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+});
+
+document.getElementById('restartBtn').addEventListener('click', () => {
+  current = 0;
+  for (const k in answers) delete answers[k];
+  freeTextValue = "";
+  resultView.style.display = 'none';
+  quizView.style.display = 'block';
+  renderQuestion();
+});
+
+/* ---------------------------------------------------------------------
+   SCORING + RESULT RENDER
+--------------------------------------------------------------------- */
+function showResult(){
+  let sum = 0;
+  const flags = [];
+  questions.forEach(q => {
+    const a = answers[q.id];
+    if (!a || !q.scored) return;
+    sum += a.weight;
+    if (a.flag) flags.push({ text: a.flag, weight: a.weight });
+  });
+
+  let percent = Math.round((sum / MAX_WEIGHT) * 100);
+  percent = Math.max(3, Math.min(97, percent));
+
+  let band = 'low', bandLabel = 'احتمال پایین رویافروشی — همچنان مدارک را استعلام کنید';
+  if (percent > 60){ band = 'high'; bandLabel = 'احتمال بالای رویافروشی/کلاهبرداری'; }
+  else if (percent > 30){ band = 'medium'; bandLabel = 'نیاز به بررسی و مدارک بیشتر'; }
+
+  quizView.style.display = 'none';
+  resultView.style.display = 'block';
+  resultView.className = 'band-' + band;
+
+  document.getElementById('gaugeNum').textContent = toFa(percent) + '٪';
+  document.getElementById('gaugeLabel').textContent = bandLabel;
+  drawGauge(percent, band);
+
+  document.getElementById('resultSummary').textContent =
+    'این درصد، برآوردیِ اولیه از احتمال غیرواقعی‌بودن یا کلاهبرداری‌آمیز بودن این پیشنهاد بر اساس پاسخ‌های شماست؛ نه یک حکم قطعی.';
+
+  // flags
+  const flagList = document.getElementById('flagList');
+  flagList.innerHTML = "";
+  if (flags.length === 0){
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="flag-icon">✅</span><span>نشانهٔ هشدار مشخصی در پاسخ‌های شما یافت نشد؛ همچنان توصیه می‌شود مدارک را مستقلاً استعلام کنید.</span>`;
+    flagList.appendChild(li);
+  } else {
+    flags.sort((a,b) => b.weight - a.weight);
+    flags.forEach(f => {
+      const li = document.createElement('li');
+      li.className = f.weight >= 20 ? 'high' : 'mid';
+      li.innerHTML = `<span class="flag-icon">${f.weight >= 20 ? '🚩' : '⚠️'}</span><span>${f.text}</span>`;
+      flagList.appendChild(li);
+    });
+  }
+
+  // regulatory notes
+  const notesWrap = document.getElementById('notesWrap');
+  notesWrap.innerHTML = "";
+  const catAnswer = answers['category'];
+  const catKey = catAnswer ? catAnswer.value : null;
+  const shown = new Set();
+  if (catKey && regulatoryNotes[catKey] && !shown.has(catKey)){
+    addNote(notesWrap, regulatoryNotes[catKey]);
+    shown.add(catKey);
+  }
+  // keyword scan on free text
+  const text = (freeTextValue || "").toLowerCase();
+  const keywordMap = [
+    { keys: ['نوار', 'بهداشتی', 'آرایش', 'خوراک', 'غذای'], key: 'health' },
+    { keys: ['سوخت', 'بیودیزل', 'ضایعات', 'شیمیای', 'اسید', 'رزین'], key: 'chem' },
+    { keys: ['استاندارد', 'صنعتی'], key: 'industrial' }
+  ];
+  keywordMap.forEach(km => {
+    if (!shown.has(km.key) && km.keys.some(k => text.includes(k))){
+      addNote(notesWrap, regulatoryNotes[km.key]);
+      shown.add(km.key);
+    }
+  });
+  if (shown.size === 0){
+    addNote(notesWrap, "برای هر نوع فرآورده‌ای، پیش از سرمایه‌گذاری، مجوز فعالیت را مستقیماً از سامانهٔ مربوطهٔ وزارت صمت، سازمان غذا و دارو یا سازمان استاندارد استعلام بگیرید؛ اعتماد به مدارک ارائه‌شده توسط خودِ فروشنده کافی نیست.");
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function addNote(container, text){
+  const div = document.createElement('div');
+  div.className = 'notes-box';
+  div.textContent = text;
+  container.appendChild(div);
+}
+
+function drawGauge(percent, band){
+  const svg = document.getElementById('gaugeSvg');
+  const cx = 130, cy = 130, r = 100;
+  const startAngle = 180, endAngle = 0; // semicircle from left to right (top half)
+  function polar(cx, cy, r, angleDeg){
+    const a = (angleDeg * Math.PI) / 180;
+    return { x: cx + r * Math.cos(a), y: cy - r * Math.sin(a) };
+  }
+  function arcPath(r0, a0, a1){
+    const p0 = polar(cx, cy, r0, a0);
+    const p1 = polar(cx, cy, r0, a1);
+    const large = Math.abs(a0 - a1) > 180 ? 1 : 0;
+    return `M ${p0.x} ${p0.y} A ${r0} ${r0} 0 ${large} 0 ${p1.x} ${p1.y}`;
+  }
+  const zones = [
+    { from: 180, to: 180 - 180*0.30, color: 'var(--green)' },
+    { from: 180 - 180*0.30, to: 180 - 180*0.60, color: 'var(--amber)' },
+    { from: 180 - 180*0.60, to: 0, color: 'var(--red)' }
+  ];
+  let html = '';
+  zones.forEach(z => {
+    html += `<path d="${arcPath(r, z.from, z.to)}" stroke="${z.color}" stroke-width="16" fill="none" stroke-linecap="round"/>`;
+  });
+  // track background (subtle, behind — drawn first would be better, but ok for contrast)
+  // needle
+  const needleAngle = 180 - (percent/100)*180;
+  const tip = polar(cx, cy, r - 22, needleAngle);
+  html += `<line x1="${cx}" y1="${cy}" x2="${tip.x}" y2="${tip.y}" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>`;
+  html += `<circle cx="${cx}" cy="${cy}" r="6" fill="var(--ink)"/>`;
+  svg.innerHTML = html;
+}
+
+/* init */
+renderQuestion();
+</script>
+</body>
+</html>
