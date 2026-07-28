@@ -7,32 +7,37 @@
 <meta name="description" content="ابزار ارزیابی احتمال کلاهبرداری یا وعده‌های غیرواقعی در پیشنهادهای فروش خط تولید در ایران">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Noto+Serif+Arabic:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#1A2333;
-    --ink-soft:#515C6E;
-    --paper:#F6F7F9;
+    --ink:#14181F;
+    --ink-soft:#5B6472;
+    --paper:#F3F4F1;
     --panel:#FFFFFF;
-    --line:#DEE2E9;
-    --brand:#1F3A5F;
-    --brand-dark:#14263D;
-    --brand-tint:#E8ECF3;
-    --amber:#93650F;
+    --line:#E1E4E4;
+    --line-strong:#C7CCCB;
+    --brand:#123F32;
+    --brand-dark:#0B2A21;
+    --brand-tint:#E8EDE9;
+    --gold:#9C7A2E;
+    --gold-tint:#F3ECD9;
+    --amber:#8F6412;
     --amber-tint:#F3EDDE;
     --red:#8A2E2E;
     --red-tint:#F3E6E5;
-    --green:#2B6A48;
+    --green:#205C41;
     --green-tint:#E6EEE9;
-    --radius:12px;
+    --radius:8px;
+    --font-display:'Noto Serif Arabic', 'Vazirmatn', Tahoma, serif;
+    --font-body:'Vazirmatn', Tahoma, sans-serif;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    font-family:'Vazirmatn', Tahoma, sans-serif;
+    font-family:var(--font-body);
     background:
-      radial-gradient(1200px 600px at 15% -10%, var(--brand-tint), transparent 60%),
-      radial-gradient(900px 500px at 110% 10%, #EEE8D9 0%, transparent 55%),
+      repeating-linear-gradient(0deg, rgba(18,63,50,0.028) 0px, rgba(18,63,50,0.028) 1px, transparent 1px, transparent 28px),
+      repeating-linear-gradient(90deg, rgba(18,63,50,0.028) 0px, rgba(18,63,50,0.028) 1px, transparent 1px, transparent 28px),
       var(--paper);
     color:var(--ink);
     min-height:100vh;
@@ -50,22 +55,24 @@
   .kicker{
     display:inline-flex;
     align-items:center;
-    gap:8px;
-    font-size:13px;
+    gap:9px;
+    font-size:11.5px;
     font-weight:600;
+    letter-spacing:0.06em;
     color:var(--brand-dark);
-    background:var(--brand-tint);
-    border:1px solid #cfe4dd;
+    background:var(--panel);
+    border:1px solid var(--line-strong);
     padding:6px 14px;
-    border-radius:999px;
-    margin-bottom:14px;
+    border-radius:3px;
+    margin-bottom:16px;
   }
-  .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--brand);}
+  .kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
   h1{
-    font-size:clamp(24px,5vw,32px);
-    font-weight:800;
-    margin:0 0 8px;
-    letter-spacing:-0.01em;
+    font-family:var(--font-display);
+    font-size:clamp(25px,5vw,33px);
+    font-weight:700;
+    margin:0 0 10px;
+    letter-spacing:0;
   }
   .sub{
     color:var(--ink-soft);
@@ -74,11 +81,13 @@
     margin:0 auto;
   }
   .card{
+    position:relative;
     background:var(--panel);
     border:1px solid var(--line);
+    border-top:3px solid var(--gold);
     border-radius:var(--radius);
-    padding:28px 24px;
-    box-shadow:0 1px 2px rgba(20,35,31,0.04), 0 12px 30px -18px rgba(20,35,31,0.25);
+    padding:30px 26px 26px;
+    box-shadow:0 1px 1px rgba(20,25,20,0.03), 0 10px 24px -18px rgba(20,25,20,0.3);
   }
   /* progress */
   .progress-row{
@@ -94,23 +103,25 @@
   }
   .segments{
     display:flex;
-    gap:5px;
-    margin-bottom:22px;
+    gap:4px;
+    margin-bottom:24px;
   }
   .segments span{
     flex:1;
-    height:5px;
-    border-radius:99px;
+    height:3px;
+    border-radius:0;
     background:var(--line);
     transition:background .25s ease;
   }
   .segments span.done{background:var(--brand);}
-  .segments span.current{background:var(--brand); opacity:.5;}
+  .segments span.current{background:var(--gold);}
 
   .q-title{
-    font-size:18px;
+    font-family:var(--font-display);
+    font-size:18.5px;
     font-weight:700;
-    margin:0 0 6px;
+    line-height:1.6;
+    margin:0 0 8px;
   }
   .q-hint{
     font-size:13.5px;
@@ -125,27 +136,29 @@
   }
   .opt{
     text-align:right;
-    border:1.5px solid var(--line);
+    border:1px solid var(--line);
+    border-right:3px solid var(--line);
     background:#fff;
-    border-radius:12px;
-    padding:14px 16px;
+    border-radius:6px;
+    padding:13px 16px;
     font-family:inherit;
-    font-size:15px;
+    font-size:14.5px;
     color:var(--ink);
     cursor:pointer;
-    transition:border-color .15s ease, background .15s ease, transform .05s ease;
+    transition:border-color .15s ease, background .15s ease;
     display:flex;
     align-items:center;
     gap:12px;
   }
   .opt .radio{
     flex:0 0 auto;
-    width:18px;height:18px;border-radius:50%;
-    border:2px solid #B9C6C0;
+    width:16px;height:16px;border-radius:50%;
+    border:1.5px solid var(--line-strong);
     position:relative;
   }
   .opt.selected{
-    border-color:var(--brand);
+    border-color:var(--line-strong);
+    border-right-color:var(--brand);
     background:var(--brand-tint);
   }
   .opt.selected .radio{border-color:var(--brand);}
@@ -155,8 +168,7 @@
     border-radius:50%;
     background:var(--brand);
   }
-  .opt:hover{border-color:var(--brand);}
-  .opt:active{transform:scale(0.995);}
+  .opt:hover{border-right-color:var(--brand);}
 
   textarea.freetext{
     width:100%;
@@ -184,7 +196,7 @@
     font-family:inherit;
     font-size:14.5px;
     font-weight:700;
-    border-radius:10px;
+    border-radius:6px;
     padding:11px 20px;
     cursor:pointer;
     border:1.5px solid transparent;
@@ -212,27 +224,36 @@
     flex-direction:column;
     align-items:center;
     margin-bottom:8px;
+    position:relative;
   }
   .gauge-num{
-    font-size:42px;
-    font-weight:800;
-    margin-top:-58px;
+    font-family:var(--font-display);
+    font-size:40px;
+    font-weight:700;
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
   }
   .gauge-label{
-    font-size:14px;
+    font-size:12.5px;
     font-weight:700;
-    padding:4px 14px;
-    border-radius:999px;
-    margin-top:4px;
+    letter-spacing:0.02em;
+    padding:5px 14px;
+    border-radius:3px;
+    margin-top:14px;
+    border:1px solid transparent;
   }
-  .band-low .gauge-label{background:var(--green-tint); color:var(--green);}
-  .band-medium .gauge-label{background:var(--amber-tint); color:var(--amber);}
-  .band-high .gauge-label{background:var(--red-tint); color:var(--red);}
+  .band-low .gauge-label{background:var(--green-tint); color:var(--green); border-color:#cfe1d6;}
+  .band-medium .gauge-label{background:var(--amber-tint); color:var(--amber); border-color:#e6d6ac;}
+  .band-high .gauge-label{background:var(--red-tint); color:var(--red); border-color:#e6bcb6;}
 
   .section-title{
+    font-family:var(--font-display);
     font-size:15px;
     font-weight:700;
-    margin:26px 0 10px;
+    margin:28px 0 12px;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--line);
     display:flex;
     align-items:center;
     gap:8px;
@@ -240,7 +261,7 @@
   .flag-list{
     list-style:none;
     padding:0;margin:0;
-    display:flex;flex-direction:column;gap:10px;
+    display:flex;flex-direction:column;gap:8px;
   }
   .flag-list li{
     display:flex;
@@ -248,18 +269,19 @@
     align-items:flex-start;
     font-size:14px;
     border:1px solid var(--line);
-    border-radius:10px;
+    border-right:3px solid var(--line-strong);
+    border-radius:5px;
     padding:12px 14px;
-    background:#fbfbf9;
+    background:#fbfbfa;
   }
-  .flag-list li.high{border-color:#e6bcb6; background:var(--red-tint);}
-  .flag-list li.mid{border-color:#eccfa0; background:var(--amber-tint);}
-  .flag-icon{flex:0 0 auto; font-size:16px; line-height:1.4;}
+  .flag-list li.high{border-right-color:var(--red); background:var(--red-tint);}
+  .flag-list li.mid{border-right-color:var(--gold); background:var(--gold-tint);}
+  .flag-icon{flex:0 0 auto; font-size:15px; line-height:1.4;}
 
   .notes-box{
     background:var(--brand-tint);
-    border:1px solid #cfe4dd;
-    border-radius:12px;
+    border:1px solid #cfdcd4;
+    border-radius:5px;
     padding:14px 16px;
     font-size:13.8px;
     color:var(--ink);
@@ -269,7 +291,7 @@
 
   .methodology{
     margin-top:26px;
-    border-top:1px dashed var(--line);
+    border-top:1px solid var(--line);
     padding-top:16px;
     font-size:13px;
     color:var(--ink-soft);
@@ -286,14 +308,14 @@
 
   .disclaimer{
     margin-top:24px;
-    background:var(--amber-tint);
-    border:1px solid #eccfa0;
-    border-radius:12px;
+    background:var(--gold-tint);
+    border:1px solid #e2d3ab;
+    border-radius:5px;
     padding:16px 16px;
     font-size:13.5px;
-    color:#5c3c0c;
+    color:#4a3a10;
   }
-  .disclaimer strong{color:#3d2900;}
+  .disclaimer strong{color:#3d2f0a;}
   .contact-line{
     margin-top:10px;
     display:flex;
@@ -318,7 +340,7 @@
     text-align:center;
     margin-top:34px;
     font-size:12px;
-    color:#7c8b84;
+    color:#8a9089;
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -330,7 +352,7 @@
 <div class="wrap">
 
   <header class="site">
-    <span class="kicker"><span class="dot"></span> ابزار پیش‌غربالگری، نه نظر نهایی کارشناسی</span>
+    <span class="kicker"><span class="dot"></span>گزارش پیش‌غربالگری · نسخهٔ عمومی</span>
     <h1>ریسک‌سنج رویافروشی خط تولید</h1>
     <p class="sub">با پاسخ به چند سؤال، احتمال این‌که پیشنهاد فروش خط تولید یا سرمایه‌گذاری تولیدی که به شما شده واقعی باشد یا رویافروشی/کلاهبرداری، تخمین زده می‌شود؛ با در نظر گرفتن مقررات ایران.</p>
   </header>
@@ -359,20 +381,22 @@
     <!-- RESULT VIEW -->
     <div id="resultView" style="display:none;">
       <div class="gauge-wrap">
-        <svg id="gaugeSvg" width="260" height="150" viewBox="0 0 260 150"></svg>
-        <div class="gauge-num" id="gaugeNum">0٪</div>
-        <div class="gauge-label" id="gaugeLabel">در حال محاسبه…</div>
+        <svg id="gaugeSvg" width="220" height="220" viewBox="0 0 220 220"></svg>
+        <div class="gauge-num" id="gaugeNum">۰٪</div>
+      </div>
+      <div style="display:flex; justify-content:center;">
+        <span class="gauge-label" id="gaugeLabel">در حال محاسبه…</span>
       </div>
 
       <p id="resultSummary" style="text-align:center; font-size:14.5px; color:var(--ink-soft); margin-top:14px;"></p>
 
       <div id="flagsSection">
-        <h3 class="section-title">⚑ نشانه‌های استخراج‌شده از پاسخ‌های شما</h3>
+        <h3 class="section-title">نشانه‌های استخراج‌شده از پاسخ‌های شما</h3>
         <ul class="flag-list" id="flagList"></ul>
       </div>
 
       <div id="notesSection">
-        <h3 class="section-title">📋 نکات مربوط به مقررات ایران</h3>
+        <h3 class="section-title">نکات مربوط به مقررات ایران</h3>
         <div id="notesWrap"></div>
       </div>
 
@@ -390,9 +414,9 @@
       </details>
 
       <div class="disclaimer">
-        <strong>⚠️ یادآوری مهم:</strong> این عدد صرفاً یک برآورد اولیه بر اساس پاسخ‌های شماست و ممکن است خطا داشته باشد؛ جایگزین بررسی حقوقی، فنی یا استعلام رسمی از مراجع ذی‌صلاح (صمت، سازمان غذا و دارو، اتاق اصناف، سازمان استاندارد) نیست.
+        <strong>یادآوری مهم:</strong> این عدد صرفاً یک برآورد اولیه بر اساس پاسخ‌های شماست و ممکن است خطا داشته باشد؛ جایگزین بررسی حقوقی، فنی یا استعلام رسمی از مراجع ذی‌صلاح (صمت، سازمان غذا و دارو، اتاق اصناف، سازمان استاندارد) نیست.
         <div class="contact-line">
-          💬 برای مشاوره تخصصی‌تر می‌توانید در اینستاگرام پیام دهید:
+          برای مشاوره تخصصی‌تر می‌توانید در اینستاگرام پیام دهید:
           <a href="https://instagram.com/dr.jhosseini" target="_blank" rel="noopener">dr.jhosseini@</a>
         </div>
       </div>
@@ -436,19 +460,20 @@ const questions = [
   },
   {
     id: "license",
-    title: "آیا فروشندهٔ خط تولید، مدرک مجوز رسمیِ قابل استعلام ارائه کرده؟",
-    hint: "مثل پروانهٔ بهره‌برداری از وزارت صمت، پروانهٔ ساخت از سازمان غذا و دارو، یا گواهی استاندارد ملی.",
+    title: "آیا فروشندهٔ خط تولید، دربارهٔ مجوزی که خودِ شما برای تولید و فروش قانونیِ محصول نهایی لازم دارید، به‌روشنی و صادقانه توضیح داده؟",
+    hint: "توجه: منظور مجوزی است که خودتان به‌عنوان تولیدکننده لازم دارید (مثل پروانهٔ بهره‌برداری از وزارت صمت، پروانهٔ ساخت از سازمان غذا و دارو، یا گواهی استاندارد ملی) — نه مجوز کسب‌وکارِ خودِ فروشندهٔ تجهیزات، که موضوعی کاملاً جداست و لزوماً به کار شما نمی‌آید.",
     scored: true,
     options: [
-      { label: "بله، مدرک رسمی و قابل استعلام آنلاین دارد", weight: 0 },
-      { label: "نمی‌دانم / بررسی نکرده‌ام", weight: 10, flag: "استعلام مجوز رسمی انجام نشده است." },
-      { label: "می‌گوید نیازی به مجوز نیست یا «بعداً درست می‌شود»", weight: 25, flag: "فروشنده ادعا می‌کند نیازی به مجوز رسمی نیست — این خودش یک نشانهٔ جدی است." }
+      { label: "بله، به‌روشنی توضیح داده و حتی برای طی‌کردن مسیر گرفتن مجوز راهنمایی کرده", weight: 0 },
+      { label: "چیزی گفته، اما کلی و سطحی بوده (مثل «راحته، جای نگرانی نیست»)", weight: 10, flag: "توضیح دربارهٔ الزام مجوزِ تولید سطحی بوده و ممکن است پیچیدگی واقعی فرایند را کم‌رنگ نشان دهد." },
+      { label: "اصلاً دربارهٔ این موضوع صحبتی نشده و خودم هم نپرسیدم", weight: 20, flag: "مشخص نیست آیا الزامِ مجوزِ تولید و فروش محصول نهایی اصلاً مطرح شده یا نه؛ این را مستقیماً از فروشنده بپرسید." },
+      { label: "می‌گوید نیازی به مجوز نیست یا «بعداً درست می‌شود»", weight: 30, flag: "فروشنده ادعا می‌کند برای تولید و فروش قانونیِ محصول نیازی به مجوز نیست — این ادعا معمولاً نادرست و یک نشانهٔ جدی است." }
     ]
   },
   {
     id: "license_research",
     title: "آیا خودتان مستقلاً دربارهٔ مجوزهای لازم برای این نوع فرآورده (مثل غذا و دارو، صمت، استاندارد، محیط‌زیست) تحقیق کرده‌اید؟",
-    hint: "منظور بررسی مستقل شماست، نه اتکا به حرف یا مدرک ارائه‌شده توسط خود فروشنده.",
+    hint: "منظور بررسی مستقل خودتان است دربارهٔ مجوزی که شما به‌عنوان تولیدکننده لازم دارید — نه اتکا به حرف یا مدرک ارائه‌شده توسط فروشندهٔ تجهیزات.",
     scored: true,
     options: [
       { label: "بله، تحقیق کردم و آنچه فروشنده گفته با الزامات واقعی هم‌خوانی دارد", weight: 0 },
@@ -482,13 +507,14 @@ const questions = [
   },
   {
     id: "sitegrade",
-    title: "آیا این فرآورده در دستهٔ موادی است که تولیدش نیازمند استقرار در شهرک صنعتی با مجوز/گرید خاص (زیست‌محیطی یا ایمنی) است؟",
-    hint: "مثل بسیاری از مواد شیمیایی، رنگ، سوخت جایگزین یا فرآورده‌های خطرناک.",
+    title: "آیا فروشنده دربارهٔ ردهٔ زیست‌محیطیِ این فرآورده و الزامات محل استقرارش با شما شفاف بوده؟",
+    hint: "طبق «ضوابط و معیارهای استقرار واحدها و فعالیت‌های صنعتی و تولیدی» (مصوب هیئت وزیران)، تقریباً همهٔ صنایع تولیدی — از غذایی و نساجی تا فلزی، شیمیایی، دارویی و بازیافت — بسته به شدت آلایندگی در یکی از رده‌های ۱ تا ۷ قرار می‌گیرند؛ این محدودیت مخصوص مواد شیمیایی خطرناک نیست.",
     scored: true,
     options: [
-      { label: "خیر، محدودیت خاصی برای محل تولید وجود ندارد", weight: 0 },
-      { label: "بله، و فروشنده الزامات شهرک صنعتی/محیط‌زیست را شفاف توضیح داده", weight: 5 },
-      { label: "بله، ولی فروشنده می‌گوید در منزل یا فضای غیرصنعتی هم قابل تولید است", weight: 35, flag: "این نوع فرآورده معمولاً فقط در شهرک‌های صنعتی و با مجوز محیط‌زیست قابل تولید قانونی است؛ ادعای تولید خانگی با این الزامات همخوانی ندارد." }
+      { label: "بله، توضیح داده این فرآورده در چه رده‌ای قرار می‌گیرد و الزامات استقرارش را شفاف گفته", weight: 0 },
+      { label: "چیزی گفته، اما سطحی بوده یا فقط گفته «مشکلی نیست»", weight: 15, flag: "توضیح دربارهٔ ردهٔ زیست‌محیطی و الزامات استقرار سطحی بوده است." },
+      { label: "اصلاً دربارهٔ رده یا الزامات استقرار صحبتی نشده", weight: 20, flag: "مشخص نیست این فرآورده در کدام ردهٔ زیست‌محیطی (۱ تا ۷) قرار دارد یا الزامات استقرارش چیست؛ این سؤال را مستقیماً مطرح کنید." },
+      { label: "می‌گوید این محصول محدودیت استقراری ندارد و در هر مکانی، از جمله منزل، قابل تولید است", weight: 35, flag: "ادعای نبودِ هیچ محدودیت استقراری برای یک واحد تولیدی، معمولاً نادرست است؛ رده‌های ۲ تا ۷ نیازمند استقرار در شهرک/ناحیهٔ صنعتی یا مکان صنعتی مصوب‌اند." }
     ]
   },
   {
@@ -549,13 +575,21 @@ const questions = [
   }
 ];
 
-const MAX_WEIGHT = 25 + 30 + 30 + 25 + 35 + 25 + 25 + 40 + 25 + 30; // 290 - از سؤالات scored (شامل دو سؤال جدید)
+const MAX_WEIGHT = 30 + 30 + 30 + 25 + 35 + 25 + 25 + 40 + 25 + 30; // 295 - از سؤالات scored
+
+const siteGradeNote = "بر اساس «ضوابط و معیارهای استقرار واحدها و فعالیت‌های صنعتی و تولیدی» (مصوب هیئت وزیران، با اصلاحات بعدی)، تقریباً همهٔ صنایع تولیدی — از غذایی، نساجی و چرم گرفته تا فلزی، شیمیایی، دارویی، برق و الکترونیک و بازیافت — بسته به شدت آلایندگی در یکی از ۷ ردهٔ زیست‌محیطی قرار می‌گیرند. واحدهای ردهٔ ۱ معمولاً در کاربری صنعتی/کارگاهی داخل شهر یا روستا هم مجازند؛ رده‌های ۲ تا ۶ باید در شهرک یا ناحیهٔ صنعتی (یا مکان صنعتی مصوب) و با رعایت فاصلهٔ معین از شهر، روستا، منابع آب و مراکز درمانی/آموزشی مستقر شوند؛ و ردهٔ ۷ فقط در شهرک‌های صنعتی تخصصی و پس از بررسی موردی ادارهٔ کل حفاظت محیط‌زیست استان مجاز است. اگر فروشنده ادعا می‌کند محصول شما هیچ‌کدام از این محدودیت‌ها را ندارد، این را مستقیماً از ادارهٔ حفاظت محیط‌زیست استان یا سازمان صمت استعلام بگیرید.";
+
+const foodDrugNote = "طبق فرآیند سازمان غذا و دارو (وزارت بهداشت)، مجوز واحدهای تولیدکنندهٔ محصولات آرایشی، بهداشتی و غذایی به‌صورت مرحله‌ای و متوالی صادر می‌شود: نخست «موافقت اصولی بهداشتی»، سپس «پروانهٔ تأسیس»، پس از تجهیز کامل کارگاه «پروانهٔ بهره‌برداری بهداشتی»، و در نهایت برای هر محصول به‌طور جداگانه و پس از تأیید فرمولاسیون، «پروانهٔ ساخت» مخصوص همان محصول. از آذر ۱۴۰۳، درج «کد شناسایی یکتا (UID)» و «کد مجوز تولید (IRC)» روی بستهٔ هر محصول نیز الزامی است. اگر فروشنده فقط یکی از این مجوزها (مثلاً پروانهٔ تأسیس) را نشان داده و آن را کافی معرفی کرده، مدارک ناقص است — بدون «پروانهٔ ساخت» مخصوص همان محصول، تولید و فروش آن غیرقانونی است.";
+
+const mimtNote = "طبق فرآیند وزارت صنعت، معدن و تجارت، راه‌اندازی قانونی یک واحد تولیدی صنعتی (به‌جز محصولات غذایی/دارویی/آرایشی که زیرمجموعهٔ سازمان غذا و دارو هستند) به دو مجوز جداگانه و متوالی نیاز دارد: نخست «جواز تأسیس» (بر اساس کد آیسیک و ظرفیت تولید اعلامی، پیش از هرگونه ساخت‌وساز) و سپس، تنها پس از تکمیل زمین، ساختمان، نصب ماشین‌آلات و تولید آزمایشی، «پروانهٔ بهره‌برداری» که اجازهٔ تولید و فروش قانونی را می‌دهد؛ این دو مجوز هم‌زمان صادر نمی‌شوند. یکی از رایج‌ترین دلایل ردِ پرونده در این مرحله، ثبت ظرفیت تولید غیرواقعی یا انتخاب کد آیسیک نادرست است — دقیقاً همان نوع خطایی که ممکن است در مدارک فروشندگان غیرحرفه‌ای دیده شود.";
+
+const standardNote = "بسیاری از کالاها — از جمله مواد غذایی، لوازم خانگی و برقی، دارو و تجهیزات پزشکی، و فهرست دیگری که سازمان ملی استاندارد ایران هرساله به‌روزرسانی می‌کند — مشمول «استاندارد اجباری» هستند. برای این کالاها، «پروانهٔ کاربرد علامت استاندارد اجباری» تنها پس از آزمایش نمونهٔ محصول در آزمایشگاهی مورد تأیید سازمان استاندارد صادر می‌شود؛ طبق قانون، بدون این پروانه، ارائهٔ تسهیلات دولتی به واحد تولیدی و تبلیغ رسمی آن محصول از طریق رسانه‌ها ممنوع است. از فروشنده بخواهید مستندات آزمایشگاهی و شمارهٔ پروانهٔ استاندارد (در صورت نیاز) را ارائه دهد.";
 
 const regulatoryNotes = {
-  health: "بر اساس مقررات سازمان غذا و دارو (زیرمجموعهٔ وزارت بهداشت)، تولید و عرضهٔ فرآورده‌های خوراکی، آشامیدنی، آرایشی و بهداشتی — از جمله نوار بهداشتی — بدون «پروانهٔ بهداشتی تأسیس و بهره‌برداری» و مجوز فعالیت اقتصادی از مراجع ذی‌صلاح، غیرقانونی است و در فضای مسکونی معمولی قابل انجامِ قانونی نیست.",
-  chem: "تولید مواد شیمیایی یا فرآورده‌های مرتبط با سوخت جایگزین (مثل بیودیزل از روغن پسماند) معمولاً مستلزم استقرار در شهرک صنعتی مصوب و اخذ مجوز از سازمان محیط‌زیست است. همچنین ادعای «بازار تضمینی نامحدود» برای چنین محصولاتی، در شرایط فعلی بازار ایران معمولاً غیرواقعی است مگر با قرارداد خریدار واقعی اثبات شود.",
-  industrial: "بسیاری از کالاهای صنعتی عمومی مشمول «استاندارد ملی اجباری» (سازمان استاندارد ایران) هستند؛ نبود گواهی استاندارد به‌معنای غیرقانونی بودن عرضهٔ محصول است.",
-  other: "حتی برای صنایع‌دستی یا پوشاک، در صورت فروش با برند مشخص یا فروش آنلاین، ثبت برند و اخذ نماد اعتماد الکترونیکی (اینماد) توصیه می‌شود."
+  health: [foodDrugNote],
+  chem: [mimtNote, "برای فرآورده‌های مرتبط با سوخت جایگزین یا بازیافت (مثل بیودیزل از روغن پسماند)، ادعای «بازار تضمینی نامحدود» در شرایط فعلی بازار ایران معمولاً غیرواقعی است مگر با قرارداد خریدار واقعی اثبات شود."],
+  industrial: [mimtNote, standardNote],
+  other: [mimtNote, "حتی برای صنایع‌دستی یا پوشاک، در صورت فروش با برند مشخص یا فروش آنلاین، ثبت برند و اخذ نماد اعتماد الکترونیکی (اینماد) توصیه می‌شود."]
 };
 
 /* ---------------------------------------------------------------------
@@ -693,14 +727,16 @@ function showResult(){
   flagList.innerHTML = "";
   if (flags.length === 0){
     const li = document.createElement('li');
-    li.innerHTML = `<span class="flag-icon">✅</span><span>نشانهٔ هشدار مشخصی در پاسخ‌های شما یافت نشد؛ همچنان توصیه می‌شود مدارک را مستقلاً استعلام کنید.</span>`;
+    li.innerHTML = `<span class="flag-icon" style="color:var(--green);">✓</span><span>نشانهٔ هشدار مشخصی در پاسخ‌های شما یافت نشد؛ همچنان توصیه می‌شود مدارک را مستقلاً استعلام کنید.</span>`;
     flagList.appendChild(li);
   } else {
     flags.sort((a,b) => b.weight - a.weight);
     flags.forEach(f => {
       const li = document.createElement('li');
       li.className = f.weight >= 20 ? 'high' : 'mid';
-      li.innerHTML = `<span class="flag-icon">${f.weight >= 20 ? '🚩' : '⚠️'}</span><span>${f.text}</span>`;
+      const mark = f.weight >= 20 ? '■' : '▪';
+      const markColor = f.weight >= 20 ? 'var(--red)' : 'var(--gold)';
+      li.innerHTML = `<span class="flag-icon" style="color:${markColor};">${mark}</span><span>${f.text}</span>`;
       flagList.appendChild(li);
     });
   }
@@ -712,7 +748,7 @@ function showResult(){
   const catKey = catAnswer ? catAnswer.value : null;
   const shown = new Set();
   if (catKey && regulatoryNotes[catKey] && !shown.has(catKey)){
-    addNote(notesWrap, regulatoryNotes[catKey]);
+    regulatoryNotes[catKey].forEach(n => addNote(notesWrap, n));
     shown.add(catKey);
   }
   // keyword scan on free text
@@ -724,10 +760,15 @@ function showResult(){
   ];
   keywordMap.forEach(km => {
     if (!shown.has(km.key) && km.keys.some(k => text.includes(k))){
-      addNote(notesWrap, regulatoryNotes[km.key]);
+      regulatoryNotes[km.key].forEach(n => addNote(notesWrap, n));
       shown.add(km.key);
     }
   });
+  // rده‌بندی زیست‌محیطی ۷گانه: مستقل از دستهٔ محصول، هرگاه پاسخ سؤال استقرار نگران‌کننده بود نمایش داده می‌شود
+  const siteAnswer = answers['sitegrade'];
+  if (siteAnswer && siteAnswer.weight > 0){
+    addNote(notesWrap, siteGradeNote);
+  }
   if (shown.size === 0){
     addNote(notesWrap, "برای هر نوع فرآورده‌ای، پیش از سرمایه‌گذاری، مجوز فعالیت را مستقیماً از سامانهٔ مربوطهٔ وزارت صمت، سازمان غذا و دارو یا سازمان استاندارد استعلام بگیرید؛ اعتماد به مدارک ارائه‌شده توسط خودِ فروشنده کافی نیست.");
   }
@@ -744,33 +785,34 @@ function addNote(container, text){
 
 function drawGauge(percent, band){
   const svg = document.getElementById('gaugeSvg');
-  const cx = 130, cy = 130, r = 100;
-  const startAngle = 180, endAngle = 0; // semicircle from left to right (top half)
-  function polar(cx, cy, r, angleDeg){
+  const cx = 110, cy = 110;
+  const rTrack = 86, rOuter = 100, rTickIn = 100, rTickOut = 107;
+  const colorMap = { low: 'var(--green)', medium: 'var(--amber)', high: 'var(--red)' };
+  const color = colorMap[band] || 'var(--brand)';
+
+  function polar(angleDeg, r){
     const a = (angleDeg * Math.PI) / 180;
-    return { x: cx + r * Math.cos(a), y: cy - r * Math.sin(a) };
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
   }
-  function arcPath(r0, a0, a1){
-    const p0 = polar(cx, cy, r0, a0);
-    const p1 = polar(cx, cy, r0, a1);
-    const large = Math.abs(a0 - a1) > 180 ? 1 : 0;
-    return `M ${p0.x} ${p0.y} A ${r0} ${r0} 0 ${large} 0 ${p1.x} ${p1.y}`;
-  }
-  const zones = [
-    { from: 180, to: 180 - 180*0.30, color: 'var(--green)' },
-    { from: 180 - 180*0.30, to: 180 - 180*0.60, color: 'var(--amber)' },
-    { from: 180 - 180*0.60, to: 0, color: 'var(--red)' }
-  ];
+
+  const circumference = 2 * Math.PI * rTrack;
+  const dash = (percent / 100) * circumference;
+
   let html = '';
-  zones.forEach(z => {
-    html += `<path d="${arcPath(r, z.from, z.to)}" stroke="${z.color}" stroke-width="16" fill="none" stroke-linecap="round"/>`;
+  // decorative outer ring (certificate-style)
+  html += `<circle cx="${cx}" cy="${cy}" r="${rOuter}" fill="none" stroke="var(--line-strong)" stroke-width="1"/>`;
+  // quarter tick marks (0/25/50/75) — genuine scale markers, not decoration
+  [0, 90, 180, 270].forEach(deg => {
+    const p0 = polar(deg - 90, rTickIn);
+    const p1 = polar(deg - 90, rTickOut);
+    html += `<line x1="${p0.x}" y1="${p0.y}" x2="${p1.x}" y2="${p1.y}" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
   });
-  // track background (subtle, behind — drawn first would be better, but ok for contrast)
-  // needle
-  const needleAngle = 180 - (percent/100)*180;
-  const tip = polar(cx, cy, r - 22, needleAngle);
-  html += `<line x1="${cx}" y1="${cy}" x2="${tip.x}" y2="${tip.y}" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>`;
-  html += `<circle cx="${cx}" cy="${cy}" r="6" fill="var(--ink)"/>`;
+  // background track
+  html += `<circle cx="${cx}" cy="${cy}" r="${rTrack}" fill="none" stroke="var(--line)" stroke-width="9"/>`;
+  // progress arc, starting at top (12 o'clock), clockwise
+  html += `<circle cx="${cx}" cy="${cy}" r="${rTrack}" fill="none" stroke="${color}" stroke-width="9"
+            stroke-linecap="round" stroke-dasharray="${dash} ${circumference - dash}"
+            transform="rotate(-90 ${cx} ${cy})"/>`;
   svg.innerHTML = html;
 }
 
