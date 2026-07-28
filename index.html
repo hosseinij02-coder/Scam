@@ -12,14 +12,15 @@
   :root{
     --ink:#14181F;
     --ink-soft:#5B6472;
-    --paper:#F3F4F1;
+    --paper:#0E2436;
+    --paper-line:rgba(255,255,255,0.05);
     --panel:#FFFFFF;
     --line:#E1E4E4;
     --line-strong:#C7CCCB;
-    --brand:#123F32;
-    --brand-dark:#0B2A21;
-    --brand-tint:#E8EDE9;
-    --gold:#9C7A2E;
+    --brand:#17435F;
+    --brand-dark:#0F2E42;
+    --brand-tint:#E6EDF2;
+    --gold:#B08D3F;
     --gold-tint:#F3ECD9;
     --amber:#8F6412;
     --amber-tint:#F3EDDE;
@@ -36,8 +37,8 @@
   body{
     font-family:var(--font-body);
     background:
-      repeating-linear-gradient(0deg, rgba(18,63,50,0.028) 0px, rgba(18,63,50,0.028) 1px, transparent 1px, transparent 28px),
-      repeating-linear-gradient(90deg, rgba(18,63,50,0.028) 0px, rgba(18,63,50,0.028) 1px, transparent 1px, transparent 28px),
+      repeating-linear-gradient(0deg, var(--paper-line) 0px, var(--paper-line) 1px, transparent 1px, transparent 28px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0px, var(--paper-line) 1px, transparent 1px, transparent 28px),
       var(--paper);
     color:var(--ink);
     min-height:100vh;
@@ -73,9 +74,10 @@
     font-weight:700;
     margin:0 0 10px;
     letter-spacing:0;
+    color:#FFFFFF;
   }
   .sub{
-    color:var(--ink-soft);
+    color:#B9C6D2;
     font-size:15px;
     max-width:520px;
     margin:0 auto;
@@ -280,7 +282,7 @@
 
   .notes-box{
     background:var(--brand-tint);
-    border:1px solid #cfdcd4;
+    border:1px solid #cddae2;
     border-radius:5px;
     padding:14px 16px;
     font-size:13.8px;
@@ -340,7 +342,7 @@
     text-align:center;
     margin-top:34px;
     font-size:12px;
-    color:#8a9089;
+    color:#7C8CA0;
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -417,7 +419,7 @@
         <strong>یادآوری مهم:</strong> این عدد صرفاً یک برآورد اولیه بر اساس پاسخ‌های شماست و ممکن است خطا داشته باشد؛ جایگزین بررسی حقوقی، فنی یا استعلام رسمی از مراجع ذی‌صلاح (صمت، سازمان غذا و دارو، اتاق اصناف، سازمان استاندارد) نیست.
         <div class="contact-line">
           برای مشاوره تخصصی‌تر می‌توانید در اینستاگرام پیام دهید:
-          <a href="https://instagram.com/dr.jhosseini" target="_blank" rel="noopener">dr.jhosseini@</a>
+          <a id="consultantLink" href="#" target="_blank" rel="noopener"></a>
         </div>
       </div>
 
@@ -436,9 +438,16 @@
    CONFIG — قابل ویرایش برای هر کسی که این ابزار را فورک/دیپلوی می‌کند
 --------------------------------------------------------------------- */
 const CONFIG = {
-  consultantLabel: "dr.jhosseini@",
-  consultantUrl: "https://instagram.com/dr.jhosseini"
+  consultantLabel: "1minmanager@",
+  consultantUrl: "https://instagram.com/1minmanager"
 };
+{
+  const link = document.getElementById('consultantLink');
+  if (link){
+    link.href = CONFIG.consultantUrl;
+    link.textContent = CONFIG.consultantLabel;
+  }
+}
 
 /* ---------------------------------------------------------------------
    QUESTION BANK
